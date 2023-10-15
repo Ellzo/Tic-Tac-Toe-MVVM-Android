@@ -3,10 +3,15 @@ package dev.startsoftware.tictactoe
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.GridView
 import android.widget.TextView
+import androidx.activity.viewModels
+import kotlin.properties.Delegates
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), GameMoveListener {
+    private var boardSize = 3
+    private val viewModel: GameViewModel by viewModels(factoryProducer = { GameViewModelFactory(boardSize) })
 
     private var turn =1
     private var gameover=false
@@ -17,11 +22,15 @@ class MainActivity : AppCompatActivity() {
 
         val gridBoard = findViewById<GridView>(R.id.grid_board)
 
-        val boardSize = resources.getInteger(R.integer.board_size)
+        boardSize = resources.getInteger(R.integer.board_size)
 
         val cells = Array(boardSize * boardSize){ Cell.EMPTY }
 
         val adapter = BoardAdapter(this, cells)
+        viewModel.liveGameState.observe(this){ board ->
+            Log.d("DEBUGGING GG", "onCreate: CHANGE OBSERVED")
+            adapter.setData(board)
+        }
         gridBoard.adapter = adapter
     }
 
@@ -85,5 +94,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return false
+    }
+
+    override fun onMove(position: Int) {
+        Log.d("DEBUGGING GG", "onMove: $position")
+        viewModel.makeMove(position)
     }
 }

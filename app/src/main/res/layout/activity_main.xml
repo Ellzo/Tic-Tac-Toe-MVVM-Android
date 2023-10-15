@@ -34,5 +34,4 @@
         android:textSize="24sp"
         android:text="Turn of Player: 1"/>
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
-class BoardAdapter(context: Context, boardCells: Array<Cell>): ArrayAdapter<Cell>(context, 0, boardCells) {
+class BoardAdapter(private val context: Context, private var boardCells: Array<Cell>): ArrayAdapter<Cell>(context, 0, boardCells) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var cellView = convertView
@@ -18,14 +18,15 @@ class BoardAdapter(context: Context, boardCells: Array<Cell>): ArrayAdapter<Cell
         val cell = getItem(position)
         cellView!!.findViewById<TextView>(R.id.tv_cell).text = if (cell != Cell.EMPTY) cell.toString() else "E"
         cellView.setOnClickListener{
-            handleClick(it as TextView)
+            (context as GameMoveListener).onMove(position)
         }
 
         return cellView
     }
 
-    private fun handleClick(view: TextView){
-
+    fun setData(board: Board){
+        boardCells = board.boardState.flatten().toTypedArray()
+        notifyDataSetChanged()
     }
 
 
