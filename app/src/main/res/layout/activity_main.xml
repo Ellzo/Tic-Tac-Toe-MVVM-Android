@@ -1,116 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="10dp"
-    android:paddingRight="10dp"
-    android:paddingLeft="10dp"
-    android:orientation="vertical"
+    android:padding="10dp"
     tools:context=".MainActivity">
 
-    <TableLayout
-        android:id="@+id/mainBoard"
-        android:layout_width="wrap_content"
+    <GridView
+        android:id="@+id/grid_board"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tx_turn"
+        android:layout_width="match_parent"
+        android:numColumns="@integer/board_size"
+        android:horizontalSpacing="@dimen/dist_S"
+        android:verticalSpacing="@dimen/dist_S"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|center"
-        android:clickable="true"
-        android:gravity="center"
-        android:layout_marginTop="100dp"
-        android:nestedScrollingEnabled="false"
-        android:padding="10dp">
-        <TableRow
-            android:id="@+id/row0"
-            style="@style/TableRow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tx_a1"
-                style="@style/LeftCell"
-                android:width="50dp"
-                android:layout_column="0"></TextView>
-
-            <TextView
-                android:id="@+id/tx_a2"
-                style="@style/MiddleCell"
-                android:width="50dp"
-                android:layout_column="1"></TextView>
-
-            <TextView
-                android:id="@+id/tx_a3"
-                style="@style/RightCell"
-                android:width="50dp"
-                android:layout_column="2"></TextView>
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/row1"
-            style="@style/TableRow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tx_a4"
-                style="@style/LeftCell"
-                android:width="50dp"
-                android:layout_column="0"></TextView>
-
-            <TextView
-                android:id="@+id/tx_a5"
-                style="@style/MiddleCell"
-                android:width="50dp"
-                android:layout_column="1"></TextView>
-
-            <TextView
-                android:id="@+id/tx_a6"
-                style="@style/RightCell"
-                android:width="50dp"
-                android:layout_column="2"
-                ></TextView>
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/row2"
-            style="@style/TableRow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tx_a7"
-                style="@style/LeftCell"
-                android:width="50dp"
-                android:layout_column="0"></TextView>
-
-            <TextView
-                android:id="@+id/tx_a8"
-                style="@style/MiddleCell"
-                android:width="50dp"
-                android:layout_column="1"></TextView>
-
-            <TextView
-                android:id="@+id/tx_a9"
-                style="@style/RightCell"
-                android:width="50dp"
-                android:layout_column="2"></TextView>
-
-        </TableRow>
-
-    </TableLayout>
-
-    <TextView android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:id="@+id/tx_turn"
-        android:padding="10dp"
-        android:layout_marginTop="50dp"
-        android:gravity="left"
+        android:padding="@dimen/dist_M"
+        android:layout_marginBottom="@dimen/dist_XXXL"
+        android:gravity="center"
         android:textColor="@color/black"
         android:fontFamily="sans-serif-medium"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:text="Turn of Player: 1"/>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dist_XS">2dp</dimen>
+    <dimen name="dist_S">4dp</dimen>
+    <dimen name="dist_M">8dp</dimen>
+    <dimen name="dist_L">16dp</dimen>
+    <dimen name="dist_XL">24dp</dimen>
+    <dimen name="dist_XXL">32dp</dimen>
+    <dimen name="dist_XXXL">48dp</dimen>
+</resources>

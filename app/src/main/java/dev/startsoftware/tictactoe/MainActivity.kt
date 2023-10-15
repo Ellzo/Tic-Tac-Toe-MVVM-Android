@@ -3,6 +3,7 @@ package dev.startsoftware.tictactoe
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.GridView
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
@@ -14,11 +15,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val cells= arrayOf(R.id.tx_a1,R.id.tx_a2,R.id.tx_a3,R.id.tx_a4,R.id.tx_a5,R.id.tx_a6,R.id.tx_a7,R.id.tx_a8,R.id.tx_a9)
-        for (cell in cells) {
-            val item=findViewById<TextView>(cell)
-            item.setOnClickListener { processClickEvent(cell) }
-        }
+        val gridBoard = findViewById<GridView>(R.id.grid_board)
+
+        val boardSize = resources.getInteger(R.integer.board_size)
+
+        val cells = Array(boardSize * boardSize){ Cell.EMPTY }
+
+        val adapter = BoardAdapter(this, cells)
+        gridBoard.adapter = adapter
     }
 
     private fun processClickEvent(cellId: Int){
@@ -47,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tx_turn).text = "Turn of Player: $turn"
     }
 
-    private val possibleWins = arrayOf(
+    /*private val possibleWins = arrayOf(
         arrayOf(R.id.tx_a1,R.id.tx_a2,R.id.tx_a3),
         arrayOf(R.id.tx_a4,R.id.tx_a5,R.id.tx_a6),
         arrayOf(R.id.tx_a7,R.id.tx_a8,R.id.tx_a9),
@@ -58,6 +62,10 @@ class MainActivity : AppCompatActivity() {
         arrayOf(R.id.tx_a1,R.id.tx_a4,R.id.tx_a7),
         arrayOf(R.id.tx_a2,R.id.tx_a5,R.id.tx_a8),
         arrayOf(R.id.tx_a3,R.id.tx_a6,R.id.tx_a9),
+    )*/
+
+    private val possibleWins = arrayOf(
+        arrayOf(0)
     )
 
     private fun checkWin(): Boolean{
