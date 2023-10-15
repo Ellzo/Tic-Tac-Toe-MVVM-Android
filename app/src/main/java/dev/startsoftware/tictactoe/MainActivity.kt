@@ -3,6 +3,7 @@ package dev.startsoftware.tictactoe
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +19,16 @@ class MainActivity : AppCompatActivity() {
         for (cell in cells) {
             val item=findViewById<TextView>(cell)
             item.setOnClickListener { processClickEvent(cell) }
+        }
+
+        findViewById<Button>(R.id.btn_restart).setOnClickListener{
+            for (cell in cells) {
+                val item=findViewById<TextView>(cell)
+                item.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                item.text = ""
+                turn = 1
+                gameover = false
+            }
         }
     }
 
@@ -39,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         val win=checkWin()
         if (win){
             findViewById<TextView>(R.id.tx_turn).text = "Congrats to Player $turn"
+            updateScores(turn)
             gameover=true
             return
         }
@@ -77,5 +89,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return false
+    }
+
+    private fun updateScores(player: Int){
+        if(player == 1){
+            var score = findViewById<TextView>(R.id.tv_score1).text.toString().toInt()
+            score += 1
+            findViewById<TextView>(R.id.tv_score1).text = score.toString()
+        }else{
+            var score = findViewById<TextView>(R.id.tv_score2).text.toString().toInt()
+            score += 1
+            findViewById<TextView>(R.id.tv_score2).text = score.toString()
+        }
     }
 }
