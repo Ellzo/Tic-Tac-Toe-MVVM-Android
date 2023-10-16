@@ -22,9 +22,10 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val gridBoard = findViewById<GridView>(R.id.grid_board)
-
         boardSize = resources.getInteger(R.integer.board_size)
+
+        val gridBoard = findViewById<GridView>(R.id.grid_board)
+        gridBoard.numColumns = boardSize
 
         val cells = Array(boardSize * boardSize){ Cell.EMPTY }
 

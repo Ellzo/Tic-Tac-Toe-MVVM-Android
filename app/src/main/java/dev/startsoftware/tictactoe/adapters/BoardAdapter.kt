@@ -1,7 +1,6 @@
 package dev.startsoftware.tictactoe.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,7 @@ class BoardAdapter(private val context: Context, private var boardCells: Array<C
     }
 
     fun setData(board: Board){
-        val cells = board.boardState.flatten().toTypedArray()
+        val cells = board.cells.flatten().toTypedArray()
         for(i in cells.indices){
             boardCells[i] = cells[i]
         }

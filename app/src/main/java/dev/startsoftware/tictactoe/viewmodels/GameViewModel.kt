@@ -29,18 +29,18 @@ class GameViewModel(private val size: Int): ViewModel() {
         val x = position / size
         val y = position % size
 
-        if(_liveGameState.value!!.boardState[x][y] == Cell.EMPTY) {
+        if(_liveGameState.value!!.cells[x][y] == Cell.EMPTY) {
             val bs = _liveGameState.value
-            bs!!.boardState[x][y] = _liveTurn.value!!
+            bs!!.cells[x][y] = _liveTurn.value!!
             _liveGameState.value = bs
-            updateStatus(x, y)
+            updateGameStatus(x, y)
             return true
         }
 
         return false
     }
 
-    private fun updateStatus(x: Int, y: Int){
+    private fun updateGameStatus(x: Int, y: Int){
         filledCells += 1
         _liveTurn.value = getNextTurn()
 
@@ -52,7 +52,7 @@ class GameViewModel(private val size: Int): ViewModel() {
 
     private fun getNextTurn() = if(_liveTurn.value == Cell.X) Cell.O else Cell.X
 
-    private fun getWinner(x: Int, y: Int) = if(_liveGameState.value!!.boardState[x][y] == Cell.X) WinState.PLAYER1 else WinState.PLAYER2
+    private fun getWinner(x: Int, y: Int) = if(_liveGameState.value!!.cells[x][y] == Cell.X) WinState.PLAYER1 else WinState.PLAYER2
 
     private fun isTie() = filledCells == size * size
 
@@ -62,7 +62,7 @@ class GameViewModel(private val size: Int): ViewModel() {
 
     private fun isHorizontalWin(x: Int, y: Int): Boolean{
         for(i in 0 until size) {
-            if (_liveGameState.value!!.boardState[i][y] != _liveGameState.value!!.boardState[x][y])
+            if (_liveGameState.value!!.cells[i][y] != _liveGameState.value!!.cells[x][y])
                 return false
         }
 
@@ -71,7 +71,7 @@ class GameViewModel(private val size: Int): ViewModel() {
 
     private fun isVerticalWin(x: Int, y: Int): Boolean{
         for(j in 0 until size) {
-            if (_liveGameState.value!!.boardState[x][j] != _liveGameState.value!!.boardState[x][y])
+            if (_liveGameState.value!!.cells[x][j] != _liveGameState.value!!.cells[x][y])
                 return false
         }
 
@@ -84,7 +84,7 @@ class GameViewModel(private val size: Int): ViewModel() {
 
         var isWin = true
         for(ij in 0 until size) {
-            if (_liveGameState.value!!.boardState[ij][ij] != _liveGameState.value!!.boardState[x][y]) {
+            if (_liveGameState.value!!.cells[ij][ij] != _liveGameState.value!!.cells[x][y]) {
                 isWin = false
                 break
             }
@@ -94,7 +94,7 @@ class GameViewModel(private val size: Int): ViewModel() {
             return true
 
         for(ij in 0 until size) {
-            if (_liveGameState.value!!.boardState[ij][size - ij - 1] != _liveGameState.value!!.boardState[x][y])
+            if (_liveGameState.value!!.cells[ij][size - ij - 1] != _liveGameState.value!!.cells[x][y])
                 return false
         }
 

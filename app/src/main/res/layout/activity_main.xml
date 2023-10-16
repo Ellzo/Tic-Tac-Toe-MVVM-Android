@@ -14,10 +14,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tx_turn"
         android:layout_width="match_parent"
-        android:numColumns="@integer/board_size"
         android:horizontalSpacing="@dimen/dist_S"
         android:verticalSpacing="@dimen/dist_S"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        tools:numColumns="@integer/board_size" />
 
     <TextView
         app:layout_constraintStart_toStartOf="parent"
