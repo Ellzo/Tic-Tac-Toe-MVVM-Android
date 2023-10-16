@@ -1,4 +1,4 @@
-package dev.startsoftware.tictactoe
+package dev.startsoftware.tictactoe.listeners
 
 import android.view.View
 import android.view.View.OnClickListener

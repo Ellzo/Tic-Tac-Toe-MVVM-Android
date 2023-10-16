@@ -1,4 +1,4 @@
-package dev.startsoftware.tictactoe
+package dev.startsoftware.tictactoe.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

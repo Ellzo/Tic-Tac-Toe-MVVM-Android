@@ -1,4 +1,4 @@
-package dev.startsoftware.tictactoe
+package dev.startsoftware.tictactoe.models
 
 data class Board(val size: Int,
                  val boardState: Array<Array<Cell>> = Array(size){ Array(size){ Cell.EMPTY } }) {

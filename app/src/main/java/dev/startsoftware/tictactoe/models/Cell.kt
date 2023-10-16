@@ -1,4 +1,4 @@
-package dev.startsoftware.tictactoe
+package dev.startsoftware.tictactoe.models
 
 enum class Cell {
     EMPTY,
