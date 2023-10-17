@@ -1,6 +1,6 @@
 package dev.startsoftware.tictactoe.models
 
-enum class WinState {
+enum class GameState {
     ONGOING,
     PLAYER1,
     PLAYER2,

@@ -2,14 +2,12 @@ package dev.startsoftware.tictactoe.UI
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.Button
 import android.widget.GridView
-import android.widget.TextView
 import androidx.activity.viewModels
 import dev.startsoftware.tictactoe.R
 import dev.startsoftware.tictactoe.adapters.BoardAdapter
 import dev.startsoftware.tictactoe.listeners.GameMoveListener
-import dev.startsoftware.tictactoe.models.Cell
 import dev.startsoftware.tictactoe.viewmodels.GameViewModel
 import dev.startsoftware.tictactoe.viewmodels.GameViewModelFactory
 import kotlin.properties.Delegates
@@ -26,16 +24,21 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
 
         val gridBoard = findViewById<GridView>(R.id.grid_board)
         gridBoard.numColumns = boardSize
-
-        val cells = Array(boardSize * boardSize){ Cell.EMPTY }
-
+        val cells = viewModel.liveBoardState.value!!.cells.flatten().toTypedArray()
         val adapter = BoardAdapter(this, cells)
-        viewModel.liveGameState.observe(this){ board ->
+
+        findViewById<Button>(R.id.btn_restart).setOnClickListener {
+            viewModel.restart()
+        }
+
+        viewModel.liveBoardState.observe(this){ board ->
             adapter.setData(board)
         }
 
-        viewModel.liveWinState.observe(this){state ->
+        viewModel.liveGameState.observe(this){ state ->
             // TODO: Handle win state
+            // Note: To color the winning cells, you might need to store some additional flags of the winning
+            //  e.g. (x, y), win type: horizontal, vertical, ect.
         }
 
         gridBoard.adapter = adapter
