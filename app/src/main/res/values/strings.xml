@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Tic Tac Toe</string>
     <string name="score">Score</string>
-    <string name="restart">Restart</string>
+    <string name="restart_multi">Restart multiplayer</string>
+    <string name="restart_computer">Restart against computer</string>
     <string name="player_1">Player 1:</string>
     <string name="player_2">Player 2:</string>
 </resources>

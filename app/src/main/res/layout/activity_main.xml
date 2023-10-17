@@ -117,14 +117,30 @@
         android:text="Turn of Player: 1"/>
 
     <Button
-        android:id="@+id/btn_restart"
+        android:id="@+id/btn_restart_multi"
+        app:layout_constraintStart_toStartOf="@id/btn_restart_computer"
+        app:layout_constraintEnd_toEndOf="@id/btn_restart_computer"
+        app:layout_constraintTop_toBottomOf="@id/tx_turn"
+        app:layout_constraintBottom_toTopOf="@id/btn_restart_computer"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginBottom="8dp"
+        android:textSize="18sp"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="12dp"
+        android:text="@string/restart_multi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_restart_computer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tx_turn"
+        app:layout_constraintTop_toBottomOf="@id/btn_restart_multi"
         app:layout_constraintBottom_toTopOf="@id/tv_scores"
-        android:textSize="26sp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
         android:paddingHorizontal="32dp"
-        android:text="@string/restart"
+        android:paddingVertical="12dp"
+        android:text="@string/restart_computer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
