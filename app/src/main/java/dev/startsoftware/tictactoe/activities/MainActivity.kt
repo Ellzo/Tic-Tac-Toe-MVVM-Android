@@ -41,8 +41,7 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
         }
 
         viewModel.liveGameState.observe(this){ state ->
-            if(state == GameState.WIN && viewModel.liveTurn.value != null)
-                updateScores(viewModel.liveTurn.value!!)
+            //TODO: Make vibration
         }
 
         viewModel.liveTurn.observe(this){player ->
@@ -50,24 +49,20 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
             // TODO: Make some delay before next turn
         }
 
+        val tvScore1 = findViewById<TextView>(R.id.tv_score1)
+        viewModel.livePlayer1.observe(this){player1 ->
+            tvScore1.text = player1.score.toString()
+        }
+
+        val tvScore2 = findViewById<TextView>(R.id.tv_score2)
+        viewModel.livePlayer2.observe(this){player2 ->
+            tvScore2.text = player2.score.toString()
+        }
+
         gridBoard.adapter = adapter
     }
 
     override fun onMove(position: Int) {
         viewModel.makeMove(position)
-    }
-
-    private fun updateScores(player: Player){
-        if(player is Player.Player1){
-            val tvScore1 = findViewById<TextView>(R.id.tv_score1)
-            var score = tvScore1.text.toString().toInt()
-            score += 1
-            tvScore1.text = score.toString()
-        }else{
-            val tvScore2 = findViewById<TextView>(R.id.tv_score2)
-            var score = tvScore2.text.toString().toInt()
-            score += 1
-            tvScore2.text = score.toString()
-        }
     }
 }

@@ -1,7 +1,5 @@
 package dev.startsoftware.tictactoe.viewmodels
 
-import android.util.Log
-import android.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,7 +16,10 @@ import kotlin.random.Random
 class GameViewModel(private val size: Int): ViewModel() {
     private val _liveBoardState = MutableLiveData<Board>()
     private val _liveGameState = MutableLiveData<GameState>()
-    private var _liveTurn = MutableLiveData<Player>()
+    private val _liveTurn = MutableLiveData<Player>()
+    private val _livePlayer1 = MutableLiveData<Player>(Player.Player1)
+    private val _livePlayer2 = MutableLiveData<Player>(Player.Player2)
+
     private var filledCells by Delegates.notNull<Int>()
 
     val liveBoardState: LiveData<Board>
@@ -29,6 +30,12 @@ class GameViewModel(private val size: Int): ViewModel() {
 
     val liveTurn: LiveData<Player>
         get() = _liveTurn
+
+    val livePlayer1: LiveData<Player>
+        get() = _livePlayer1
+
+    val livePlayer2: LiveData<Player>
+        get() = _livePlayer2
 
     init{
         restart()
@@ -43,29 +50,6 @@ class GameViewModel(private val size: Int): ViewModel() {
         _liveTurn.value!!.isX = true
 
         moveIfComputer()
-    }
-
-    fun makeMove(position: Int): Boolean{
-        val x = position % size
-        val y = position / size
-        return makeMove(x, y)
-    }
-
-    private fun makeMove(x: Int, y: Int): Boolean {
-        if (!initiateOrOnGoing() || x !in 0 until size || y !in 0 until size)
-            return false
-
-        if (_liveBoardState.value!!.cells[x][y] == Cell.EMPTY) {
-            _liveBoardState.value!!.cells[x][y] = if (liveTurn.value!!.isX) Cell.X() else Cell.O()
-            updateGameStatus(x, y)
-            _liveBoardState.notifyObserver()
-
-            moveIfComputer()
-
-            return true
-        }
-
-        return false
     }
 
     private fun moveIfComputer(){
@@ -215,6 +199,29 @@ class GameViewModel(private val size: Int): ViewModel() {
         return score
     }
 
+    fun makeMove(position: Int): Boolean{
+        val x = position % size
+        val y = position / size
+        return makeMove(x, y)
+    }
+
+    private fun makeMove(x: Int, y: Int): Boolean {
+        if (!initiateOrOnGoing() || x !in 0 until size || y !in 0 until size)
+            return false
+
+        if (_liveBoardState.value!!.cells[x][y] == Cell.EMPTY) {
+            _liveBoardState.value!!.cells[x][y] = if (liveTurn.value!!.isX) Cell.X() else Cell.O()
+            updateGameStatus(x, y)
+            _liveBoardState.notifyObserver()
+
+            moveIfComputer()
+
+            return true
+        }
+
+        return false
+    }
+
     private fun initiateOrOnGoing(): Boolean{
         if(_liveGameState.value == GameState.INITIATED)
             _liveGameState.value = GameState.ONGOING
@@ -225,16 +232,14 @@ class GameViewModel(private val size: Int): ViewModel() {
     private fun updateGameStatus(x: Int, y: Int){
         filledCells += 1
 
-        if(!updateWinStatus(x, y) and isTie())
+        if(!updateWinAndScores(x, y) and isTie())
             _liveGameState.value = GameState.TIE
 
         if(liveGameState.value == GameState.ONGOING)
             _liveTurn.value = nextTurn()
     }
 
-    private fun nextTurn() = if(_liveTurn.value is Player.Player1) Player.Player2 else Player.Player1
-
-    private fun updateWinStatus(x: Int, y: Int): Boolean{
+    private fun updateWinAndScores(x: Int, y: Int): Boolean{
         val isHorizontalWin = isHorizontalWin(x, y)
         if(isHorizontalWin)
             setCellsOfHorizontalWin(y)
@@ -254,6 +259,8 @@ class GameViewModel(private val size: Int): ViewModel() {
         val isWin = isHorizontalWin || isVerticalWin || isMainDiagonalWin || isAntiDiagonalWin
         if(isWin) {
             _liveGameState.value = GameState.WIN
+            liveTurn.value!!.score += 1
+            notifyScoreChange()
             return true
         }
 
@@ -324,6 +331,17 @@ class GameViewModel(private val size: Int): ViewModel() {
     }
 
     private fun isTie() = filledCells == size * size
+
+    private fun nextTurn() = if(_liveTurn.value is Player.Player1) Player.Player2 else Player.Player1
+
+
+    private fun notifyScoreChange(){
+        if(liveTurn.value is Player.Player1)
+            _livePlayer1.notifyObserver()
+
+        if(liveTurn.value is Player.Player2)
+            _livePlayer2.notifyObserver()
+    }
 
     private fun <T> MutableLiveData<T>.notifyObserver() {
         this.value = this.value
