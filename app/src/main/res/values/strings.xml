@@ -5,4 +5,5 @@
     <string name="score">Score</string>
     <string name="player_2">Player 2</string>
     <string name="player_1">Player 1</string>
+    <string name="turn_of">Turn of</string>
 </resources>

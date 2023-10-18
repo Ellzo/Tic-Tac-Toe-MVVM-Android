@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/dist_M"
-    tools:context=".UI.MainActivity">
+    tools:context=".activities.MainActivity">
 
     <GridView
         app:layout_constraintTop_toTopOf="parent"
@@ -20,18 +20,33 @@
         tools:numColumns="@integer/board_size" />
 
     <TextView
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_player"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_restart"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:id="@+id/tx_turn"
         android:layout_marginBottom="@dimen/dist_XL"
-        android:gravity="center"
+        android:gravity="end"
         android:textColor="@color/black"
         android:fontFamily="sans-serif-medium"
         android:textSize="24sp"
-        android:text="Turn of Player: 1"/>
+        android:text="@string/turn_of"/>
+
+    <TextView
+        app:layout_constraintStart_toEndOf="@id/tx_turn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tx_turn"
+        app:layout_constraintBottom_toBottomOf="@id/tx_turn"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:id="@+id/tv_player"
+        android:layout_marginStart="@dimen/dist_M"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="24sp"
+        tools:text="Player"/>
 
     <Button
         android:id="@+id/btn_restart"

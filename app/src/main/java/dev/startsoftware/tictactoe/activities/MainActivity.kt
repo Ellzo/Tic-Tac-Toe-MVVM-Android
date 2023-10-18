@@ -1,4 +1,4 @@
-package dev.startsoftware.tictactoe.UI
+package dev.startsoftware.tictactoe.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,8 +9,8 @@ import androidx.activity.viewModels
 import dev.startsoftware.tictactoe.R
 import dev.startsoftware.tictactoe.adapters.BoardAdapter
 import dev.startsoftware.tictactoe.listeners.GameMoveListener
-import dev.startsoftware.tictactoe.models.Cell
 import dev.startsoftware.tictactoe.models.GameState
+import dev.startsoftware.tictactoe.models.Player
 import dev.startsoftware.tictactoe.viewmodels.GameViewModel
 import dev.startsoftware.tictactoe.viewmodels.GameViewModelFactory
 import kotlin.properties.Delegates
@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
         val cells = viewModel.liveBoardState.value!!.cells.flatten().toTypedArray()
         val adapter = BoardAdapter(this, cells)
 
+        val tvTurnOfPlayer = findViewById<TextView>(R.id.tv_player)
+
         findViewById<Button>(R.id.btn_restart).setOnClickListener {
             viewModel.restart()
         }
@@ -39,9 +41,13 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
         }
 
         viewModel.liveGameState.observe(this){ state ->
-            if(state == GameState.WIN_X || state == GameState.WIN_O){
-                updateScores(state == GameState.WIN_X)
-            }
+            if(state == GameState.WIN && viewModel.liveTurn.value != null)
+                updateScores(viewModel.liveTurn.value!!)
+        }
+
+        viewModel.liveTurn.observe(this){player ->
+            tvTurnOfPlayer.text = player.displayName
+            // TODO: Make some delay before next turn
         }
 
         gridBoard.adapter = adapter
@@ -49,11 +55,10 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
 
     override fun onMove(position: Int) {
         viewModel.makeMove(position)
-        viewModel.computerMove()
     }
 
-    private fun updateScores(isPlayer1: Boolean){
-        if(isPlayer1){
+    private fun updateScores(player: Player){
+        if(player is Player.Player1){
             val tvScore1 = findViewById<TextView>(R.id.tv_score1)
             var score = tvScore1.text.toString().toInt()
             score += 1
