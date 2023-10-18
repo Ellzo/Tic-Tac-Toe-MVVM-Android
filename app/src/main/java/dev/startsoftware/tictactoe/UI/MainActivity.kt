@@ -39,9 +39,8 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
         }
 
         viewModel.liveGameState.observe(this){ state ->
-            if(state is GameState.Win){
-                val winningCell = adapter.setWinningBoard(state)
-                updateScores(winningCell is Cell.X)
+            if(state == GameState.WIN_X || state == GameState.WIN_O){
+                updateScores(state == GameState.WIN_X)
             }
         }
 

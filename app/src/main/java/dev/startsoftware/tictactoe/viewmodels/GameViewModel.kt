@@ -1,19 +1,22 @@
 package dev.startsoftware.tictactoe.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dev.startsoftware.tictactoe.models.GameState
 import dev.startsoftware.tictactoe.models.Board
 import dev.startsoftware.tictactoe.models.Cell
+import kotlin.properties.Delegates
 import kotlin.random.Random
 
 
 class GameViewModel(private val size: Int): ViewModel() {
-    private val _liveBoardState = MutableLiveData(Board(size))
-    private val _liveGameState = MutableLiveData<GameState>(GameState.Initiated)
-    private var _liveTurn = MutableLiveData<Cell>(Cell.X())
-    private var filledCells = 0
+    private val _liveBoardState = MutableLiveData<Board>()
+    private val _liveGameState = MutableLiveData<GameState>()
+    private var _liveTurn = MutableLiveData<Cell>()
+    private var filledCells by Delegates.notNull<Int>()
+
     val liveBoardState: LiveData<Board>
         get() = _liveBoardState
 
@@ -23,15 +26,19 @@ class GameViewModel(private val size: Int): ViewModel() {
     val liveTurn: LiveData<Cell>
         get() = _liveTurn
 
+    init{
+        restart()
+    }
+
     fun restart(){
         _liveBoardState.value = Board(size)
-        _liveGameState.value = GameState.Initiated
+        _liveGameState.value = GameState.INITIATED
         _liveTurn.value = Cell.X()
         filledCells = 0
     }
 
     fun computerMove(){
-        if(liveGameState.value !is GameState.OnGoing)
+        if(liveGameState.value != GameState.ONGOING)
             return
 
         var isDone: Boolean
@@ -43,20 +50,19 @@ class GameViewModel(private val size: Int): ViewModel() {
     }
 
     fun makeMove(position: Int): Boolean{
-        if(_liveGameState.value is GameState.Initiated)
-            _liveGameState.value = GameState.OnGoing
+        if(_liveGameState.value == GameState.INITIATED)
+            _liveGameState.value = GameState.ONGOING
 
-        if(_liveGameState.value !is GameState.OnGoing)
+        if(_liveGameState.value != GameState.ONGOING)
             return false
 
         val x = position % size
         val y = position / size
 
         if(_liveBoardState.value!!.cells[x][y] == Cell.EMPTY) {
-            val bs = _liveBoardState.value
-            bs!!.cells[x][y] = _liveTurn.value!!
-            _liveBoardState.value = bs
+            _liveBoardState.value!!.cells[x][y] = _liveTurn.value!!
             updateGameStatus(x, y)
+            _liveBoardState.notifyObserver()
             return true
         }
 
@@ -67,71 +73,107 @@ class GameViewModel(private val size: Int): ViewModel() {
         filledCells += 1
         _liveTurn.value = getNextTurn()
 
-        updateTieStatus()
-        updateWinStatus(x, y)
+        if(!updateWinStatus(x, y) and isTie())
+            _liveGameState.value = GameState.TIE
     }
 
     private fun getNextTurn() = if(_liveTurn.value is Cell.X) Cell.O() else Cell.X()
 
-    private fun updateWinStatus(x: Int, y: Int){
+    private fun updateWinStatus(x: Int, y: Int): Boolean{
         val isHorizontalWin = isHorizontalWin(x, y)
+        if(isHorizontalWin)
+            setCellsOfHorizontalWin(y)
+
         val isVerticalWin = isVerticalWin(x, y)
+        if(isVerticalWin)
+            setCellsOfVerticalWin(x)
+
         val isMainDiagonalWin = isMainDiagonalWin(x, y)
+        if(isMainDiagonalWin)
+            setCellsOfMainDiagonalWin()
+
         val isAntiDiagonalWin = isAntiDiagonalWin(x, y)
+        if(isAntiDiagonalWin)
+            setCellsOfAntiDiagonalWin()
 
-        val isWin = isHorizontalWin or isVerticalWin or isMainDiagonalWin or isAntiDiagonalWin
-        if(isWin != 0)
-            _liveGameState.value = GameState.Win(x, y, isWin)
+        val isWin = isHorizontalWin || isVerticalWin || isMainDiagonalWin || isAntiDiagonalWin
+        Log.d("TAG - WIN", "updateWinStatus: $isWin")
+        if(isWin) {
+            _liveGameState.value = getWinner(x, y)
+            return true
+        }
+
+        return false
     }
 
-    private fun updateTieStatus(){
-        if(isTie())
-            _liveGameState.value = GameState.Tie
+    private fun isHorizontalWin(x: Int, y: Int): Boolean{
+        for(i in 0 until size) {
+            if (_liveBoardState.value!!.cells[i][y] != _liveBoardState.value!!.cells[x][y])
+                return false
+        }
+
+        return true
     }
 
-    //private fun getWinner(x: Int, y: Int) = if(_liveBoardState.value!!.cells[x][y] == Cell.X) GameState.PLAYER1 else GameState.PLAYER2
+    private fun setCellsOfHorizontalWin(y: Int){
+        for(i in 0 until size)
+            _liveBoardState.value!!.cells[i][y].win = true
+    }
+
+    private fun isVerticalWin(x: Int, y: Int): Boolean{
+        for(j in 0 until size) {
+            if (_liveBoardState.value!!.cells[x][j] != _liveBoardState.value!!.cells[x][y])
+            if (_liveBoardState.value!!.cells[x][j] != _liveBoardState.value!!.cells[x][y])
+                return false
+        }
+
+        return true
+    }
+
+    private fun setCellsOfVerticalWin(x: Int){
+        for(j in 0 until size)
+            _liveBoardState.value!!.cells[x][j].win = true
+    }
+
+    private fun isMainDiagonalWin(x: Int, y: Int): Boolean{
+        if(x != y)
+            return false
+
+        for(ij in 0 until size) {
+            if (_liveBoardState.value!!.cells[ij][ij] != _liveBoardState.value!!.cells[x][y])
+                return false
+        }
+
+        return true
+    }
+
+    private fun setCellsOfMainDiagonalWin(){
+        for(ij in 0 until size)
+            _liveBoardState.value!!.cells[ij][ij].win = true
+    }
+
+    private fun isAntiDiagonalWin(x: Int, y: Int): Boolean{
+        if(x + y != size - 1)
+            return false
+
+        for(ij in 0 until size) {
+            if (_liveBoardState.value!!.cells[ij][size - ij - 1] != _liveBoardState.value!!.cells[x][y])
+                return false
+        }
+
+        return true
+    }
+
+    private fun setCellsOfAntiDiagonalWin(){
+        for(ij in 0 until size)
+            _liveBoardState.value!!.cells[ij][size - ij - 1].win = true
+    }
+
+    private fun getWinner(x: Int, y: Int) = if(_liveBoardState.value!!.cells[x][y] is Cell.X) GameState.WIN_X else GameState.WIN_O
 
     private fun isTie() = filledCells == size * size
 
-    private fun isHorizontalWin(x: Int, y: Int): Int{
-        for(i in 0 until size) {
-            if (_liveBoardState.value!!.cells[i][y].toString() != _liveBoardState.value!!.cells[x][y].toString())
-                return 0
-        }
-
-        return GameState.WinDirection.HORIZONTAL.toInt()
-    }
-
-    private fun isVerticalWin(x: Int, y: Int): Int{
-        for(j in 0 until size) {
-            if (_liveBoardState.value!!.cells[x][j].toString() != _liveBoardState.value!!.cells[x][y].toString())
-                return 0
-        }
-
-        return GameState.WinDirection.VERTICAL.toInt()
-    }
-
-    private fun isMainDiagonalWin(x: Int, y: Int): Int{
-        if(x != y)
-            return 0
-
-        for(ij in 0 until size) {
-            if (_liveBoardState.value!!.cells[ij][ij].toString() != _liveBoardState.value!!.cells[x][y].toString())
-                return 0
-        }
-
-        return GameState.WinDirection.MAIN_DIAGONAL.toInt()
-    }
-
-    private fun isAntiDiagonalWin(x: Int, y: Int): Int{
-        if(x + y != size - 1)
-            return 0
-
-        for(ij in 0 until size) {
-            if (_liveBoardState.value!!.cells[ij][size - ij - 1].toString() != _liveBoardState.value!!.cells[x][y].toString())
-                return 0
-        }
-
-        return GameState.WinDirection.ANTI_DIAGONAL.toInt()
+    private fun <T> MutableLiveData<T>.notifyObserver() {
+        this.value = this.value
     }
 }

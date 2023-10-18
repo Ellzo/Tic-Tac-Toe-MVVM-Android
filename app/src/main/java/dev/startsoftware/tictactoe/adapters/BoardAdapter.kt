@@ -49,49 +49,5 @@ class BoardAdapter(private val context: Context, private var boardCells: Array<C
         notifyDataSetChanged()
     }
 
-    fun setWinningBoard(winState: GameState.Win): Cell{
-        val size = sqrt(boardCells.size.toDouble()).toInt()
-        val position = size * winState.y + winState.x
-
-        if(GameState.WinDirection.HORIZONTAL.toInt() and winState.directions != 0)
-            setHorizontalWin(position, size)
-
-        if(GameState.WinDirection.VERTICAL.toInt() and winState.directions != 0)
-            setVerticalWin(position, size)
-
-        if(GameState.WinDirection.MAIN_DIAGONAL.toInt() and winState.directions != 0)
-            setDiagonalWin(size)
-
-        if(GameState.WinDirection.ANTI_DIAGONAL.toInt() and winState.directions != 0)
-            setAntiDiagonalWin(size)
-
-        notifyDataSetChanged()
-
-        return boardCells[position]
-    }
-
-    private fun setHorizontalWin(position: Int, size: Int){
-        val row = position / size
-        for(i in 0 until size)
-            boardCells[row * size + i].win = true
-    }
-    private fun setVerticalWin(position: Int, size: Int){
-        val column = position % size
-        for(i in 0 until size)
-            boardCells[i * size + column].win = true
-    }
-
-    private fun setDiagonalWin(size: Int){
-        for(i in 0 until size){
-            boardCells[i * (size + 1)].win = true
-        }
-    }
-
-    private fun setAntiDiagonalWin(size: Int){
-        for(i in 0 until size){
-            boardCells[(i + 1) * (size - 1)].win = true
-        }
-    }
-
 
 }

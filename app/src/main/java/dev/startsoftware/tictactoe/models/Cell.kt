@@ -17,4 +17,21 @@ sealed class Cell(open var win: Boolean){
             return "O"
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if(other !is Cell){
+            return false
+        }
+
+        if(this is EMPTY && other is EMPTY)
+            return true
+
+        if(this is X && other is X)
+            return true
+
+        if(this is O && other is O)
+            return true
+
+        return false
+    }
 }
