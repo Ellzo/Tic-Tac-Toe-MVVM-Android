@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import dev.startsoftware.tictactoe.R
 import dev.startsoftware.tictactoe.adapters.BoardAdapter
 import dev.startsoftware.tictactoe.listeners.GameMoveListener
+import dev.startsoftware.tictactoe.models.GameState
 import dev.startsoftware.tictactoe.viewmodels.GameViewModel
 import dev.startsoftware.tictactoe.viewmodels.GameViewModelFactory
 import kotlin.properties.Delegates
@@ -36,9 +37,9 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
         }
 
         viewModel.liveGameState.observe(this){ state ->
-            // TODO: Handle win state
-            // Note: To color the winning cells, you might need to store some additional flags of the winning
-            //  e.g. (x, y), win type: horizontal, vertical, ect.
+            if(state is GameState.Win){
+                adapter.setWinningBoard(state)
+            }
         }
 
         gridBoard.adapter = adapter
