@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.GridView
+import android.widget.TextView
 import androidx.activity.viewModels
 import dev.startsoftware.tictactoe.R
 import dev.startsoftware.tictactoe.adapters.BoardAdapter
 import dev.startsoftware.tictactoe.listeners.GameMoveListener
+import dev.startsoftware.tictactoe.models.Cell
 import dev.startsoftware.tictactoe.models.GameState
 import dev.startsoftware.tictactoe.viewmodels.GameViewModel
 import dev.startsoftware.tictactoe.viewmodels.GameViewModelFactory
@@ -38,7 +40,8 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
 
         viewModel.liveGameState.observe(this){ state ->
             if(state is GameState.Win){
-                adapter.setWinningBoard(state)
+                val winningCell = adapter.setWinningBoard(state)
+                updateScores(winningCell is Cell.X)
             }
         }
 
@@ -47,5 +50,20 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
 
     override fun onMove(position: Int) {
         viewModel.makeMove(position)
+        viewModel.computerMove()
+    }
+
+    private fun updateScores(isPlayer1: Boolean){
+        if(isPlayer1){
+            val tvScore1 = findViewById<TextView>(R.id.tv_score1)
+            var score = tvScore1.text.toString().toInt()
+            score += 1
+            tvScore1.text = score.toString()
+        }else{
+            val tvScore2 = findViewById<TextView>(R.id.tv_score2)
+            var score = tvScore2.text.toString().toInt()
+            score += 1
+            tvScore2.text = score.toString()
+        }
     }
 }

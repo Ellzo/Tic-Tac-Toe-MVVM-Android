@@ -49,7 +49,7 @@ class BoardAdapter(private val context: Context, private var boardCells: Array<C
         notifyDataSetChanged()
     }
 
-    fun setWinningBoard(winState: GameState.Win){
+    fun setWinningBoard(winState: GameState.Win): Cell{
         val size = sqrt(boardCells.size.toDouble()).toInt()
         val position = size * winState.y + winState.x
 
@@ -66,6 +66,8 @@ class BoardAdapter(private val context: Context, private var boardCells: Array<C
             setAntiDiagonalWin(size)
 
         notifyDataSetChanged()
+
+        return boardCells[position]
     }
 
     private fun setHorizontalWin(position: Int, size: Int){

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import dev.startsoftware.tictactoe.models.GameState
 import dev.startsoftware.tictactoe.models.Board
 import dev.startsoftware.tictactoe.models.Cell
+import kotlin.random.Random
 
 
 class GameViewModel(private val size: Int): ViewModel() {
@@ -27,6 +28,18 @@ class GameViewModel(private val size: Int): ViewModel() {
         _liveGameState.value = GameState.Initiated
         _liveTurn.value = Cell.X()
         filledCells = 0
+    }
+
+    fun computerMove(){
+        if(liveGameState.value !is GameState.OnGoing)
+            return
+
+        var isDone: Boolean
+        var position: Int
+        do{
+            position = Random.nextInt(size * size)
+           isDone = makeMove(position)
+        }while(!isDone)
     }
 
     fun makeMove(position: Int): Boolean{
