@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
             return
         val existingValue:String=findViewById<TextView>(cellId).text.toString()
         if (existingValue.isNotEmpty()){
+            makeVibration()
             return
         }
         if (turn==1) {
