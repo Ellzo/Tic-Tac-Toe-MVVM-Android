@@ -1,7 +1,10 @@
 package dev.startsoftware.tictactoe.activities
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.widget.Button
 import android.widget.GridView
 import android.widget.TextView
@@ -41,7 +44,8 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
         }
 
         viewModel.liveGameState.observe(this){ state ->
-            //TODO: Make vibration
+            if(state == GameState.WIN)
+                vibrate()
         }
 
         viewModel.liveTurn.observe(this){player ->
@@ -63,6 +67,21 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
     }
 
     override fun onMove(position: Int) {
-        viewModel.makeMove(position)
+        if(!viewModel.makeMove(position))
+            vibrate()
+    }
+
+    private fun vibrate(){
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrationEffect: VibrationEffect
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+            vibrationEffect = VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE);
+
+            // Cancel other vibrations before vibrating
+            vibrator.cancel();
+            vibrator.vibrate(vibrationEffect);
+        }
     }
 }
