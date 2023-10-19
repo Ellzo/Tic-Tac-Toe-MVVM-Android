@@ -41,7 +41,17 @@ class GameViewModel(private val size: Int): ViewModel() {
         restart()
     }
 
-    fun restart(){
+    fun setPlayer1DisplayName(displayName: String){
+        _livePlayer1.value?.displayName = displayName
+        _livePlayer1.notifyObserver()
+    }
+
+    fun setPlayer2DisplayName(displayName: String){
+        _livePlayer2.value?.displayName = displayName
+        _livePlayer2.notifyObserver()
+    }
+
+    fun restart(againstComputer: Boolean = false){
         _liveBoardState.value = Board(size)
         _liveGameState.value = GameState.INITIATED
         filledCells = 0
@@ -49,6 +59,7 @@ class GameViewModel(private val size: Int): ViewModel() {
         _liveTurn.value = nextTurn()
         _liveTurn.value!!.isX = true
 
+        Player.Player2.isComputer = againstComputer
         moveIfComputer()
     }
 
@@ -59,7 +70,6 @@ class GameViewModel(private val size: Int): ViewModel() {
         if(!(liveTurn.value is Player.Player2 && (liveTurn.value as Player.Player2).isComputer))
             return
 
-        //randomComputerMove()
         heuristicComputerMove()
     }
 

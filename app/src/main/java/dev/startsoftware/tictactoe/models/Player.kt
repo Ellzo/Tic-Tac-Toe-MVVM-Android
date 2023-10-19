@@ -18,7 +18,7 @@ sealed class Player(var score: Int = 0){
 
     object Player2: Player() {
         override var displayName = "Player 2"
-        var isComputer: Boolean = true
+        var isComputer: Boolean = false
 
         override var isX = false
             set(value){

@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Tic Tac Toe</string>
     <string name="turn_of_player_1">Turn of Player: 1</string>
-    <string name="restart">Restart</string>
+    <string name="restart_multiplayer">Restart Multiplayer</string>
     <string name="score">Score</string>
     <string name="player_2">Player 2</string>
     <string name="player_1">Player 1</string>
     <string name="turn_of">Turn of</string>
+    <string name="start">Start</string>
+    <string name="board_size">Board Size</string>
+    <string name="player_1_name">Player 1 Name</string>
+    <string name="player_2_name">Player 2 Name</string>
+    <string name="restart_against_computer">Restart against Computer</string>
 </resources>

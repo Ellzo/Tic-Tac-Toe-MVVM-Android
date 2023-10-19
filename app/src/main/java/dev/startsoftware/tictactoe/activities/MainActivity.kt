@@ -13,7 +13,6 @@ import dev.startsoftware.tictactoe.R
 import dev.startsoftware.tictactoe.adapters.BoardAdapter
 import dev.startsoftware.tictactoe.listeners.GameMoveListener
 import dev.startsoftware.tictactoe.models.GameState
-import dev.startsoftware.tictactoe.models.Player
 import dev.startsoftware.tictactoe.viewmodels.GameViewModel
 import dev.startsoftware.tictactoe.viewmodels.GameViewModelFactory
 import kotlin.properties.Delegates
@@ -35,8 +34,12 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
 
         val tvTurnOfPlayer = findViewById<TextView>(R.id.tv_player)
 
-        findViewById<Button>(R.id.btn_restart).setOnClickListener {
+        findViewById<Button>(R.id.btn_restart_multiplayer).setOnClickListener {
             viewModel.restart()
+        }
+
+        findViewById<Button>(R.id.btn_restart_computer).setOnClickListener {
+            viewModel.restart(true)
         }
 
         viewModel.liveBoardState.observe(this){ board ->
@@ -50,7 +53,6 @@ class MainActivity : AppCompatActivity(), GameMoveListener {
 
         viewModel.liveTurn.observe(this){player ->
             tvTurnOfPlayer.text = player.displayName
-            // TODO: Make some delay before next turn
         }
 
         val tvScore1 = findViewById<TextView>(R.id.tv_score1)

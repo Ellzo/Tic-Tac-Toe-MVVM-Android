@@ -23,7 +23,7 @@
     <TextView
         app:layout_constraintEnd_toStartOf="@id/tv_player"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_restart"
+        app:layout_constraintBottom_toTopOf="@id/btn_restart_multiplayer"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:id="@+id/tx_turn"
@@ -50,15 +50,30 @@
         tools:text="Player"/>
 
     <Button
-        android:id="@+id/btn_restart"
-        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/btn_restart_multiplayer"
+        app:layout_constraintStart_toEndOf="@id/btn_restart_computer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="@dimen/dist_M"
-        android:textSize="26sp"
+        android:textSize="22sp"
+        android:paddingVertical="@dimen/dist_M"
+        android:layout_marginHorizontal="@dimen/dist_XL"
+        android:text="@string/restart_multiplayer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_restart_computer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_restart_multiplayer"
+        app:layout_constraintTop_toTopOf="@id/btn_restart_multiplayer"
+        app:layout_constraintBottom_toBottomOf="@id/btn_restart_multiplayer"
+        android:textSize="22sp"
         android:paddingHorizontal="@dimen/dist_XXL"
-        android:text="@string/restart"
-        android:layout_width="wrap_content"
+        android:paddingVertical="@dimen/dist_M"
+        android:layout_marginHorizontal="@dimen/dist_XL"
+        android:text="@string/restart_against_computer"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"/>
 
 

@@ -1,7 +1,6 @@
 package dev.startsoftware.tictactoe.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +10,6 @@ import dev.startsoftware.tictactoe.models.Cell
 import dev.startsoftware.tictactoe.listeners.GameMoveListener
 import dev.startsoftware.tictactoe.R
 import dev.startsoftware.tictactoe.models.Board
-import dev.startsoftware.tictactoe.models.GameState
-import kotlin.math.sqrt
 
 class BoardAdapter(private val context: Context, private var boardCells: Array<Cell>): ArrayAdapter<Cell>(context, 0, boardCells) {
 
@@ -29,7 +26,7 @@ class BoardAdapter(private val context: Context, private var boardCells: Array<C
         }
 
         if(cell!!.win)
-            cellView.setBackgroundColor(context.resources.getColor(R.color.black, null))
+            cellView.setBackgroundColor(context.resources.getColor(R.color.win_background, null))
         else
             cellView.setBackgroundColor(context.resources.getColor(R.color.white, null))
 
